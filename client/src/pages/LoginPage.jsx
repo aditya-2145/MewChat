@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import assets from "../assets/assets";
 import { AuthContext } from "../../context/AuthContext";
 
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 const LoginPage = () => {
   const [currentState, setCurrentState] = useState("Sign Up");
   const [fullName, setFullName] = useState("");
@@ -78,7 +79,7 @@ const LoginPage = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
               </span>
             </div>
           </>
@@ -93,7 +94,7 @@ const LoginPage = () => {
           ></textarea>
         )}
         <div className="flex items-center gap-2 text-sm text-white/95">
-          <input type="checkbox" />
+          <input type="checkbox" required />
           <p>Agree to the terms & privacy policies.</p>
         </div>
         <button

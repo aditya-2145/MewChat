@@ -120,7 +120,7 @@ const ChatContainer = () => {
                 </p>
               )}
               <div className="text-center text-xs">
-                <img
+                {/* <img
                   src={
                     isOwnMessage
                       ? authUser?.profilePic || assets.avatar_icon
@@ -128,8 +128,8 @@ const ChatContainer = () => {
                   }
                   alt=""
                   className="w-7 rounded-full"
-                />
-                <p className="text-white/50">
+                /> */}
+                <p className="text-white/50 text-[8px]">
                   {formatMessageTime(msg.createdAt)}
                 </p>
               </div>
