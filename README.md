@@ -13,7 +13,7 @@ A secure real-time chat app with email OTP signup and instant messaging
 
 <p align="center">
   <a href="https://github.com/aditya-2145/mewchat">
-    <img src="https://readme-typing-svg.herokuapp.com?lines=Real-time+Chat+App;Email+OTP+Signup;Secure+Messaging;MERN+Stack+%26+Socket.IO&center=true&width=500&height=45&color=36BCF7&vCenter=true&pause=1000">
+    <img src="https://readme-typing-svg.herokuapp.com?lines=Real-time+Chat+App;Email+OTP+Signup;Secure+Messaging;MERN+Stack+%26+Socket.IO&center=true&width=500&height=45&color=36BCF7&vCenter=true&pause=500">
   </a>
 </p>
 
