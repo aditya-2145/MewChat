@@ -1,9 +1,16 @@
 import cloudinary from "../lib/cloudinary.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/user.js";
+import Otp from "../models/otp.js"; // ✅ OTP model
 import bcrypt from "bcryptjs";
+import sendOTP from "../lib/utils.js"; // ✅ Function to send OTP
 
-// signup new user
+// Helper: Generate random 6-digit OTP
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// ====================== SIGNUP (Step 1 - Send OTP) ======================
 export const signup = async (req, res) => {
   const { fullName, email, password, bio } = req.body;
   try {
@@ -16,19 +23,80 @@ export const signup = async (req, res) => {
       return res.json({ success: false, message: "Account already exists" });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Clear any old OTPs for this email
+    await Otp.deleteMany({ email });
 
-    const newUser = await User.create({
-      fullName,
+    // Generate new OTP
+    const otp = generateOTP();
+
+    // Save OTP + user data temporarily
+    await Otp.create({
       email,
-      password: hashedPassword,
+      otp,
+      fullName,
+      password,
       bio,
+      expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes expiry
     });
 
+    // Send OTP email
+    await sendOTP(email, otp);
+
+    res.json({
+      success: true,
+      message: "OTP sent to your email. Please verify to complete signup.",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// ====================== VERIFY OTP (Step 2 - Create User) ======================
+export const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.json({
+        success: false,
+        message: "Email and OTP are required",
+      });
+    }
+
+    const record = await Otp.findOne({ email });
+    if (!record) {
+      return res.json({ success: false, message: "No OTP found" });
+    }
+
+    // Check expiry
+    if (record.expiresAt < Date.now()) {
+      await Otp.deleteOne({ email });
+      return res.json({ success: false, message: "OTP expired" });
+    }
+
+    // Check OTP
+    if (record.otp.toString().trim() !== otp.toString().trim()) {
+      return res.json({ success: false, message: "Invalid OTP" });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(record.password, salt);
+
+    // Create new user
+    const newUser = await User.create({
+      fullName: record.fullName,
+      email: record.email,
+      password: hashedPassword,
+      bio: record.bio,
+    });
+
+    // Delete OTP record
+    await Otp.deleteOne({ email });
+
+    // Generate token
     const token = generateToken(newUser._id);
 
-    // remove password before sending
     const { password: _, ...userWithoutPassword } = newUser._doc;
 
     res.json({
@@ -43,7 +111,7 @@ export const signup = async (req, res) => {
   }
 };
 
-// login user
+// ====================== LOGIN ======================
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -60,7 +128,6 @@ export const login = async (req, res) => {
 
     const token = generateToken(userData._id);
 
-    // remove password before sending
     const { password: _, ...userWithoutPassword } = userData._doc;
 
     res.json({
@@ -75,22 +142,20 @@ export const login = async (req, res) => {
   }
 };
 
-// check if user is authenticated
+// ====================== CHECK AUTH ======================
 export const checkAuth = (req, res) => {
   if (!req.user) {
     return res.json({ success: false, message: "Not authenticated" });
   }
 
-  // ✅ Only send safe fields
   const { _id, fullName, email, bio, profilePic } = req.user;
-
   res.json({
     success: true,
     user: { _id, fullName, email, bio, profilePic },
   });
 };
 
-// update profile
+// ====================== UPDATE PROFILE ======================
 export const updateProfile = async (req, res) => {
   try {
     const { profilePic, bio, fullName } = req.body;
@@ -117,7 +182,6 @@ export const updateProfile = async (req, res) => {
       );
     }
 
-    // remove password before sending
     const { password: _, ...userWithoutPassword } = updatedUser._doc;
 
     res.json({ success: true, user: userWithoutPassword });

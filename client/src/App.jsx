@@ -9,7 +9,6 @@ import { AuthContext } from "../context/AuthContext";
 export default function App() {
   const { authUser, loading } = useContext(AuthContext);
 
-  
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[url(../public/bgImage.png)] bg-contain">
@@ -30,8 +29,12 @@ export default function App() {
           element={authUser ? <HomePage /> : <Navigate to="/login" replace />}
         />
         <Route
+          path="/chat"
+          element={authUser ? <HomePage /> : <Navigate to="/login" replace />}
+        />
+        <Route
           path="/login"
-          element={!authUser ? <LoginPage /> : <Navigate to="/" replace />}
+          element={!authUser ? <LoginPage /> : <Navigate to="/chat" replace />}
         />
         <Route
           path="/profile"
