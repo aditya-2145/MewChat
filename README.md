@@ -7,7 +7,7 @@
 </p>
 
 <h3 align="center">
-  🐾 MewChat – A secure real-time chat app with email OTP signup and instant messaging
+A secure real-time chat app with email OTP signup and instant messaging
   <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="28">
 </h3>
 
