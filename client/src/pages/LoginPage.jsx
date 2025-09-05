@@ -55,7 +55,7 @@ const LoginPage = () => {
       if (res.data.success) {
         toast.success("Account created successfully!");
         localStorage.setItem("token", res.data.token);
-        window.location.href = "/"; 
+        window.location.href = "/";
       } else {
         toast.error(res.data.message);
       }
@@ -185,7 +185,7 @@ const LoginPage = () => {
 
         <button
           type="submit"
-          className="py-3 bg-gradient-to-r from-[#A5D9A0]/50 to-[#1C4D33] text-white rounded-md cursor-pointer"
+          className="py-3 bg-gradient-to-r from-[#A5D9A0]/50 to-[#1C4D33] text-white rounded-md cursor-pointer hover:from-[#A5D9A0]/70 hover:to-[#1C4D33]/90 transition-all"
         >
           {currentState === "Sign Up" && step === 1
             ? "Get OTP"
@@ -203,7 +203,7 @@ const LoginPage = () => {
                   setCurrentState("LogIn");
                   setStep(1);
                 }}
-                className="font-medium text-[#74c990] cursor-pointer"
+                className="font-medium text-[#74c990] cursor-pointer hover:from-[#A5D9A0]/70 hover:to-[#1C4D33]/90 transition-all"
               >
                 Login
               </span>

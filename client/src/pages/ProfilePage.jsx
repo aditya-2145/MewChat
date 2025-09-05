@@ -70,7 +70,7 @@ const ProfilePage = () => {
           {/* Save button */}
           <button
             type="submit"
-            className="bg-gradient-to-r from-[#A5D9A0]/50 to-[#1C4D33] text-white p-2 rounded-full text-lg cursor-pointer"
+            className="bg-gradient-to-r from-[#A5D9A0]/50 to-[#1C4D33] text-white p-2 rounded-full text-lg cursor-pointer hover:from-[#A5D9A0]/70 hover:to-[#1C4D33]/90 transition-all"
           >
             Save
           </button>
