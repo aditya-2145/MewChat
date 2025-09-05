@@ -3,7 +3,7 @@
 </div>
 
 <p align="center">
-  <img src="readme assets/mew_big.png" alt="MewChat Logo" width="120" />
+  <img src="readme assets/mew_big.png" alt="MewChat Logo" width="300" />
 </p>
 
 <h3 align="center">
@@ -54,10 +54,6 @@ It ensures **secure onboarding with Email OTP verification** and provides a smoo
 ---
 
 ## 🔄 Signup Workflow  
-
-<p align="center">
-  <img src="readme assets/signup-flow.png" alt="Signup Workflow" width="80%">
-</p>
 
 ```mermaid
 flowchart TD
